@@ -1,4 +1,9 @@
 package com.edutech.microservicios.repository;
 
-public interface ClienteRepository {
+import com.edutech.microservicios.model.Cliente;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 }
