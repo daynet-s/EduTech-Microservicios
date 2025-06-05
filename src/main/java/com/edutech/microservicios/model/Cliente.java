@@ -28,7 +28,7 @@ public class Cliente {
     private String apellidos;
 
     @Column(nullable = true)
-    private String fechaNacimiento;
+    private Date fechaNacimiento;
 
     @Column(nullable = false)
     private String correo;
