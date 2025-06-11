@@ -35,6 +35,7 @@ public class DataLoader implements CommandLineRunner {
             cliente.setApellidos(faker.name().lastName());
             cliente.setFechaNacimiento(new Date());
             cliente.setCorreo(faker.internet().emailAddress());
+            clienteRepository.save(cliente);
         }
 
         List<Cliente> clientes = clienteRepository.findAll();

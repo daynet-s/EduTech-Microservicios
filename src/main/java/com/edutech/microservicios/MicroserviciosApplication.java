@@ -8,6 +8,7 @@ public class MicroserviciosApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(MicroserviciosApplication.class, args);
+		//DataLoader.run();
 	}
 
 }
