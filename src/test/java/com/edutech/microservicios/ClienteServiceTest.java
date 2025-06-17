@@ -4,15 +4,17 @@ import com.edutech.microservicios.model.Cliente;
 import com.edutech.microservicios.repository.ClienteRepository;
 import com.edutech.microservicios.service.ClienteService;
 import org.junit.jupiter.api.Test;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
+
+// Para que funcione testFindAll
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class ClienteServiceTest {
@@ -23,14 +25,14 @@ public class ClienteServiceTest {
     @MockBean
     private ClienteRepository clienteRepo;
 
-    // REVISAR POR QUE LOS METODOS DA ERROR EN COMPARACION A DOC
-    /*@Test
+
+    @Test
     public void testFindAll() {
         when(clienteRepo.findAll()).thenReturn(List.of(new Cliente(1, "ashe12", "Juan", "Perez",
-                                                                LocalDate.now(), "juan@correo.com")));
+                                                                new Date(1999,12,19), "juan@correo.com")));
         List<Cliente> clientes = clienteServ.findAll();
 
         assertNotNull(clientes);
         assertEquals(1, clientes.size());
-    }*/
+    }
 }
