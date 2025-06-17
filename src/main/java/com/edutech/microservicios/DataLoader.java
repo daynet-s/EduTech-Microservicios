@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-@Profile("test")
+@Profile("dev")
 @Component
 public class DataLoader implements CommandLineRunner {
 
@@ -38,7 +38,7 @@ public class DataLoader implements CommandLineRunner {
             clienteRepository.save(cliente);
         }
 
-        //List<Cliente> clientes = clienteRepository.findAll();
+        List<Cliente> clientes = clienteRepository.findAll();
     }
 
 
