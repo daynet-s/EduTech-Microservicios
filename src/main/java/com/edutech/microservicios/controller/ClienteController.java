@@ -6,11 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/clientes")
+@Tag(name = "Clientes", description = "Operaciones relacionadas con los clientes")
+@ApiResponse(responseCode = "200", description = "Operación exitosa")
 public class ClienteController {
     @Autowired
     private ClienteService clienteServ;
