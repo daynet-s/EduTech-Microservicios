@@ -34,5 +34,6 @@ public class ClienteServiceTest {
 
         assertNotNull(clientes);
         assertEquals(1, clientes.size());
+        System.out.println("Clientes encontrados: " + clientes);
     }
 }
