@@ -1,75 +1,96 @@
 package com.edutech.microservicios.controller;
 
+import com.edutech.microservicios.assembler.ClienteModelAssembler;
 import com.edutech.microservicios.model.Cliente;
 import com.edutech.microservicios.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
 @RestController
 @RequestMapping("/api/v1/clientes")
 public class ClienteController {
+
+    @Autowired
+    private ClienteModelAssembler assembler;
+
     @Autowired
     private ClienteService clienteServ;
 
-    // Listar todos los clientes
+
+    // Listar todos los clientes con HATEOAS
     @GetMapping
-    public ResponseEntity<List<Cliente>> showList() {
-        List<Cliente> clientes = clienteServ.findAll();
+    public ResponseEntity<CollectionModel<EntityModel<Cliente>>> showList() {
+        List<EntityModel<Cliente>> clientes = clienteServ.findAll().stream()
+                .map(assembler::toModel)
+                .toList();
+
         if (clientes.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(clientes);
+
+        return ResponseEntity.ok(
+                CollectionModel.of(clientes,
+                        linkTo(methodOn(ClienteController.class).showList()).withSelfRel())
+        );
     }
 
-    // Buscar a cliente por Id
+    // Obtener cliente por ID con HATEOAS
     @GetMapping("/{id}")
-    public ResponseEntity<Cliente> searchCliente(@PathVariable Integer id) {
-        try {
-            Cliente cliente = clienteServ.findById(id);
-            return ResponseEntity.ok(cliente);
-        } catch (Exception e) {
+    public ResponseEntity<EntityModel<Cliente>> searchCliente(@PathVariable Integer id) {
+        Cliente cliente = clienteServ.findById(id);
+        if (cliente == null) {
             return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.ok(assembler.toModel(cliente));
     }
 
-    // Guardar un nuevo cliente
+    // Guardar un nuevo cliente (retornando HATEOAS)
     @PostMapping
-    public ResponseEntity<Cliente> saveCliente(@RequestBody Cliente cliente) {
+    public ResponseEntity<EntityModel<Cliente>> saveCliente(@RequestBody Cliente cliente) {
         Cliente newCliente = clienteServ.save(cliente);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newCliente);
+        EntityModel<Cliente> entityModel = assembler.toModel(newCliente);
+        return ResponseEntity
+                .created(entityModel.getRequiredLink("self").toUri())
+                .body(entityModel);
     }
 
-    // Actualizar un cliente
+    // Actualizar cliente (retornando HATEOAS)
     @PutMapping("/{id}")
-    public ResponseEntity<Cliente> updateCliente(@PathVariable Integer id, @RequestBody Cliente cliente) {
-        try {
-            Cliente cli = clienteServ.findById(id);
-            cli.setId(id);
-            cli.setClave(cliente.getClave());
-            cli.setNombres(cliente.getNombres());
-            cli.setApellidos(cliente.getApellidos());
-            cli.setFechaNacimiento(cliente.getFechaNacimiento());
-            cli.setCorreo(cliente.getCorreo());
-
-            clienteServ.save(cli);
-            return ResponseEntity.ok(cliente);
-        } catch (Exception e) {
+    public ResponseEntity<EntityModel<Cliente>> updateCliente(@PathVariable Integer id, @RequestBody Cliente cliente) {
+        Cliente existingCliente = clienteServ.findById(id);
+        if (existingCliente == null) {
             return ResponseEntity.notFound().build();
         }
+        // Actualiza campos
+        existingCliente.setClave(cliente.getClave());
+        existingCliente.setNombres(cliente.getNombres());
+        existingCliente.setApellidos(cliente.getApellidos());
+        existingCliente.setFechaNacimiento(cliente.getFechaNacimiento());
+        existingCliente.setCorreo(cliente.getCorreo());
+
+        Cliente updatedCliente = clienteServ.save(existingCliente);
+        EntityModel<Cliente> entityModel = assembler.toModel(updatedCliente);
+
+        return ResponseEntity.ok(entityModel);
     }
 
-    // Eliminar un cliente
+    // Eliminar cliente
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCliente(@PathVariable Long id) {
+    public ResponseEntity<?> deleteCliente(@PathVariable Integer id) {
         try {
-            clienteServ.delete(id);
+            clienteServ.delete(Long.valueOf(id));
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
 }
+

@@ -32,4 +32,8 @@ public class Cliente {
 
     @Column(nullable = false)
     private String correo;
+
+    public Integer getId() {
+        return this.id;
+    }
 }

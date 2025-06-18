@@ -21,7 +21,7 @@ public class ClienteService {
     }
 
     // Encontrar por Id
-    public Cliente findById (long id) {
+    public Cliente findById (Integer id) {
         return clienteRepo.findById(id).get();
     }
 
