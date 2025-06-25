@@ -21,7 +21,7 @@ public class ClienteService {
     }
 
     // Encontrar por Id
-    public Cliente findById (long id) {
+    public Cliente findById (int id) {
         return clienteRepo.findById(id).get();
     }
 
@@ -31,7 +31,7 @@ public class ClienteService {
     }
 
     // Eliminar entidad
-    public void delete(Long id) {
+    public void delete(int id) {
         clienteRepo.deleteById(id);
     }
 }

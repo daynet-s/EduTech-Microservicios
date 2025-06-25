@@ -15,7 +15,7 @@ import java.util.Date;
 public class Cliente {
 
     @Id
-    private long id;
+    private int id;
 
     @Column(unique = true, nullable = false)
     private String clave;

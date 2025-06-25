@@ -40,7 +40,7 @@ public class ClienteServiceTest {
 
     @Test
     public void testFindById() {
-        long id = 1;
+        int id = 1;
         Cliente cliente = new Cliente(id,"ashe12", "Juan", "Perez",
                                     new Date(1999,12,19), "juan@correo.com");
         when(clienteRepo.findById(id)).thenReturn(Optional.of(cliente));
@@ -63,7 +63,7 @@ public class ClienteServiceTest {
 
     @Test
     public void testDelete() {
-        long id = 1;
+        int id = 1;
         doNothing().when(clienteRepo).deleteById(id);
 
         clienteServ.delete(id);

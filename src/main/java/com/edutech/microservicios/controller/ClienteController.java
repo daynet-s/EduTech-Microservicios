@@ -64,7 +64,7 @@ public class ClienteController {
 
     // Eliminar un cliente
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCliente(@PathVariable Long id) {
+    public ResponseEntity<?> deleteCliente(@PathVariable Integer id) {
         try {
             clienteServ.delete(id);
             return ResponseEntity.noContent().build();
