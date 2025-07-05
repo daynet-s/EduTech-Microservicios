@@ -15,8 +15,7 @@ import java.util.Date;
 public class Cliente {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private int id;
 
     @Column(unique = true, nullable = false)
     private String clave;
@@ -28,8 +27,12 @@ public class Cliente {
     private String apellidos;
 
     @Column(nullable = true)
-    private String fechaNacimiento;
+    private Date fechaNacimiento;
 
     @Column(nullable = false)
     private String correo;
+
+    public Integer getId() {
+        return this.id;
+    }
 }
